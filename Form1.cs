@@ -213,6 +213,7 @@ namespace FingerprintRecognition
             comboBoxPortCom.SelectedIndex = 0;
 
             pictureBoxOriginal.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBoxNew.SizeMode = PictureBoxSizeMode.StretchImage;
         }
 
         private void buttonConnect_Click(object sender, EventArgs e)
@@ -252,6 +253,8 @@ namespace FingerprintRecognition
             Bitmap bitmap = (Bitmap)Image.FromFile(path);
             Bitmap newBitmap = ImageUtils.Binarized(bitmap, 100);
             pictureBoxOriginal.Image = newBitmap;
+            Bitmap thinBitmap = Thinning.Thin(newBitmap);
+            pictureBoxNew.Image = thinBitmap;
         }
     }
 }
