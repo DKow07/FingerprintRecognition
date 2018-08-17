@@ -1,4 +1,5 @@
-﻿using FingerprintRecognition.Utils;
+﻿using FingerprintRecognition.ImageOperations;
+using FingerprintRecognition.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -193,9 +194,8 @@ namespace FingerprintRecognition
         public Form1()
         {
             InitializeComponent();
-            
-            comboBoxBaudrate.SelectedIndex = 0;
-            comboBoxPortCom.SelectedIndex = 0;
+
+            InitForms();
 
             m_Image = Marshal.AllocHGlobal(256 * 1024);
             m_IdentifyCallback = new IdentifyCallback(identifyCallback);
@@ -207,25 +207,33 @@ namespace FingerprintRecognition
             UF_SetReceiveRawDataCallback(new RawDataCallback(rawDataCallback));
         }
 
+        private void InitForms()
+        {
+            comboBoxBaudrate.SelectedIndex = 0;
+            comboBoxPortCom.SelectedIndex = 0;
+
+            pictureBoxOriginal.SizeMode = PictureBoxSizeMode.StretchImage;
+        }
+
         private void buttonConnect_Click(object sender, EventArgs e)
         {
             bool isBinaryMode = radioButtonBinaryMode.Checked;
             string port = comboBoxPortCom.Text;
             string baudrate = comboBoxBaudrate.Text;
 
-            if(ConnectionUtils.GetInstance().IsConnectedToScanner == false)
+            if (Connection.GetInstance().IsConnectedToScanner == false)
             {
-                if(ConnectionUtils.GetInstance().ConnectToScanner(isBinaryMode, port, baudrate) == -1)
+                if (Connection.GetInstance().ConnectToScanner(isBinaryMode, port, baudrate) == -1)
                 {
                     MessageBox.Show("Can't connect to scanner");
                 }
             }
             else
             {
-                ConnectionUtils.GetInstance().Disconnect();
+                Connection.GetInstance().Disconnect();
             }
 
-            HandleConnectionForms(ConnectionUtils.GetInstance().IsConnectedToScanner);
+            HandleConnectionForms(Connection.GetInstance().IsConnectedToScanner);
         }
 
         private void HandleConnectionForms(bool isConnected)
@@ -233,6 +241,17 @@ namespace FingerprintRecognition
             panelConnectionStatus.BackColor = isConnected ? Color.Lime : Color.Red;
             buttonConnect.Text = isConnected ? "Disconnect" : "Connect";
             buttonScann.Enabled = isConnected ? true : false;
+        }
+
+        private void openFingerprintToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "JPG|*.jpg|PNG|*.png"; 
+            openFileDialog.ShowDialog();
+            string path = openFileDialog.FileName;
+            Bitmap bitmap = (Bitmap)Image.FromFile(path);
+            Bitmap newBitmap = ImageUtils.Binarized(bitmap, 100);
+            pictureBoxOriginal.Image = newBitmap;
         }
     }
 }

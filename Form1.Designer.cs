@@ -44,8 +44,8 @@
             this.openFingerprintToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxOriginal = new System.Windows.Forms.PictureBox();
+            this.pictureBoxNew = new System.Windows.Forms.PictureBox();
             this.buttonScann = new System.Windows.Forms.Button();
             this.labelScannInfo = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -54,8 +54,8 @@
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOriginal)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNew)).BeginInit();
             this.panel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -212,6 +212,7 @@
             this.openFingerprintToolStripMenuItem.Name = "openFingerprintToolStripMenuItem";
             this.openFingerprintToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.openFingerprintToolStripMenuItem.Text = "Open fingerprint";
+            this.openFingerprintToolStripMenuItem.Click += new System.EventHandler(this.openFingerprintToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
@@ -224,25 +225,25 @@
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
-            // pictureBox1
+            // pictureBoxOriginal
             // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.pictureBoxOriginal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.pictureBox1.BackColor = System.Drawing.Color.White;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 120);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(310, 321);
-            this.pictureBox1.TabIndex = 2;
-            this.pictureBox1.TabStop = false;
+            this.pictureBoxOriginal.BackColor = System.Drawing.Color.White;
+            this.pictureBoxOriginal.Location = new System.Drawing.Point(0, 120);
+            this.pictureBoxOriginal.Name = "pictureBoxOriginal";
+            this.pictureBoxOriginal.Size = new System.Drawing.Size(310, 321);
+            this.pictureBoxOriginal.TabIndex = 2;
+            this.pictureBoxOriginal.TabStop = false;
             // 
-            // pictureBox2
+            // pictureBoxNew
             // 
-            this.pictureBox2.BackColor = System.Drawing.Color.White;
-            this.pictureBox2.Location = new System.Drawing.Point(314, 120);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(310, 321);
-            this.pictureBox2.TabIndex = 3;
-            this.pictureBox2.TabStop = false;
+            this.pictureBoxNew.BackColor = System.Drawing.Color.White;
+            this.pictureBoxNew.Location = new System.Drawing.Point(314, 120);
+            this.pictureBoxNew.Name = "pictureBoxNew";
+            this.pictureBoxNew.Size = new System.Drawing.Size(310, 321);
+            this.pictureBoxNew.TabIndex = 3;
+            this.pictureBoxNew.TabStop = false;
             // 
             // buttonScann
             // 
@@ -303,8 +304,8 @@
             this.ClientSize = new System.Drawing.Size(624, 441);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.pictureBox2);
+            this.Controls.Add(this.pictureBoxOriginal);
+            this.Controls.Add(this.pictureBoxNew);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
@@ -319,8 +320,8 @@
             this.groupBox2.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOriginal)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNew)).EndInit();
             this.panel1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
@@ -347,8 +348,8 @@
         private System.Windows.Forms.Panel panelConnectionStatus;
         private System.Windows.Forms.ComboBox comboBoxPortCom;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.PictureBox pictureBoxOriginal;
+        private System.Windows.Forms.PictureBox pictureBoxNew;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Panel panel2;
