@@ -67,6 +67,5 @@ namespace FingerprintRecognition.Utils
                 IsConnectedToScanner = false;
             }
         }
-
     }
 }
