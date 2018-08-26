@@ -234,15 +234,15 @@ namespace FingerprintRecognition.ImageOperations
 
                         for (int j = maskHeightStart; j <= -maskHeightStart; j++)
                         {
-                            row = (byte*)bitmapData.Scan0 + (y + j * bitmapData.Stride);
+                            //row = (byte*)bitmapData.Scan0 + (y + j * bitmapData.Stride);
                             for (int i = maskWidthStart; i <= -maskHeightStart; i++)
                             {
                                 int pixelX = x + i;
                                 int pixelY = y + j;
                                
-                                Color pixelColor = ImageUtils.GetColorPixelFromRGB(row[pixelX * pixelSize],
-                                    row[pixelX * pixelSize + 1], row[pixelX * pixelSize + 2]);
-                                //Color pixelColor = originalBitmap.GetPixel(pixelX, pixelY);
+                                //Color pixelColor = ImageUtils.GetColorPixelFromRGB(row[pixelX * pixelSize],
+                                //    row[pixelX * pixelSize + 1], row[pixelX * pixelSize + 2]);
+                                Color pixelColor = originalBitmap.GetPixel(pixelX, pixelY);
                                 //Debug.Print(pixelColor.ToArgb().ToString() + " === " + pixelColorTmp.ToArgb().ToString());
                                 int pixelValue = GetPixelValue(pixelColor);
                                 int maskValue = currentMask[i + (-(maskWidthStart)), j + (-(maskHeightStart))];
