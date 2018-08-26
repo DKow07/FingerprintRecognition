@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -253,8 +254,15 @@ namespace FingerprintRecognition
             Bitmap bitmap = (Bitmap)Image.FromFile(path);
             Bitmap newBitmap = ImageUtils.Binarized(bitmap, 100);
             pictureBoxOriginal.Image = newBitmap;
-            Bitmap thinBitmap = Thinning.Thin(newBitmap);
-            pictureBoxNew.Image = thinBitmap;
+            //Bitmap thinBitmap = Thinning.Thin(newBitmap);
+            //pictureBoxNew.Image = thinBitmap;
+            //---------------------------------------------
+            Bitmap bmp = new Bitmap(pictureBoxOriginal.Image);
+            double[,] anglesAveraged = SobelOperation.CalculateAngles(bmp);
+            Bitmap sobelBitmap = MorphologicalOperations.ErosionDirectional(bmp, anglesAveraged);
+            //Bitmap sobelBitmap2 = MorphologicalOperations.DilatationDirectional(sobelBitmap, anglesAveraged);
+
+            //pictureBoxNew.Image = sobelBitmap2;
         }
     }
 }

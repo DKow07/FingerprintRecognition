@@ -38,5 +38,10 @@ namespace FingerprintRecognition.ImageOperations
             newBitmap.UnlockBits(bitmapData);
             return newBitmap;
         }
+
+        public static Color GetColorPixelFromRGB(byte r, byte g, byte b)
+        {
+            return Color.FromArgb(r, g, b);
+        }
     }
 }

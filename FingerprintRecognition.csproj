@@ -52,10 +52,14 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="ImageOperations\ImageUtils.cs" />
+    <Compile Include="ImageOperations\MorphologicalOperations.cs" />
+    <Compile Include="ImageOperations\SobelOperation.cs" />
     <Compile Include="ImageOperations\Thinning.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Connection\Connection.cs" />
+    <Compile Include="util\ProgressEventArgs.cs" />
+    <Compile Include="util\Vector2.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
