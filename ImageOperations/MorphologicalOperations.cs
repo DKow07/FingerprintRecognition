@@ -185,8 +185,13 @@ namespace FingerprintRecognition.ImageOperations
             
             int stop = 1;
 
-            int[,] maskHorizontal = { { 0, 1, 0 }, { 1, 1, 1 }, { 0, 1, 0 } };
-            int[,] maskVertical = { { 0, 1, 0 }, { 0, 1, 0 }, { 0, 1, 0 } };
+            //int[,] maskHorizontal = { { 0, 1, 0 }, { 1, 1, 1 }, { 0, 1, 0 } };
+            //int[,] maskVertical = { { 0, 1, 0 }, { 0, 1, 0 }, { 0, 1, 0 } };
+            //int[,] maskCross1 = { { 0, 0, 1 }, { 0, 1, 0 }, { 1, 0, 0 } };
+            //int[,] maskCross2 = { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } };
+
+            int[,] maskHorizontal = { { 0, 0, 0 }, { 0, 1, 1 }, { 0, 1, 0 } };
+            int[,] maskVertical = { { 0, 1, 0 }, { 0, 1, 0 }, { 1, 0, 0 } };
             int[,] maskCross1 = { { 0, 0, 1 }, { 0, 1, 0 }, { 1, 0, 0 } };
             int[,] maskCross2 = { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } };
 

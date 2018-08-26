@@ -1,0 +1,16 @@
+diff a/ImageOperations/Thinning.cs b/ImageOperations/Thinning.cs	(rejected hunks)
+@@ -41,13 +41,12 @@
+             }
+             newBitmap.UnlockBits(bitmapData);
+             return boolArray;
+-
+         }
+ 
+         private static Bitmap Bool2Image(bool[][] boolArray)
+         {
+             Bitmap newBitmap = new Bitmap(boolArray[0].Length, boolArray.Length);
+-            using (Graphics g = Graphics.FromImage(newBitmap)) 
++            using (Graphics g = Graphics.FromImage(newBitmap))
+             {
+                 g.Clear(Color.White);
+             }
