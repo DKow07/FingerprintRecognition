@@ -254,15 +254,24 @@ namespace FingerprintRecognition
             Bitmap bitmap = (Bitmap)Image.FromFile(path);
             Bitmap newBitmap = ImageUtils.Binarized(bitmap, 100);
             pictureBoxOriginal.Image = newBitmap;
-            //Bitmap thinBitmap = Thinning.Thin(newBitmap);
-            //pictureBoxNew.Image = thinBitmap;
-            //---------------------------------------------
+            Bitmap thinBitmap = Thinning.Thin(newBitmap);
+            //pictureBoxOriginal.Image = thinBitmap;
+            //-----------------------------------------------------------------------------------------------------------
             Bitmap bmp = new Bitmap(pictureBoxOriginal.Image);
             double[,] anglesAveraged = SobelOperation.CalculateAngles(bmp);
             Bitmap sobelBitmap = MorphologicalOperations.ErosionDirectional(bmp, anglesAveraged);
-            //Bitmap sobelBitmap2 = MorphologicalOperations.DilatationDirectional(sobelBitmap, anglesAveraged);
+            Bitmap sobelBitmap2 = MorphologicalOperations.DilatationDirectional(sobelBitmap, anglesAveraged);
+            pictureBoxNew.Image = sobelBitmap2;
+            //-----------------------------------------------------------------------------------------------------------
+            Bitmap minutiaeBitmap = new Bitmap(pictureBoxOriginal.Image);
+            MinutiaeFinder finder = new MinutiaeFinder();
+            Bitmap finderBitmap = finder.ShowMinutiae(minutiaeBitmap);
+            Bitmap thinFinderBitmap = Thinning.Thin(sobelBitmap2);
+            pictureBoxOriginal.Image = thinBitmap;
+            pictureBoxNew.Image = thinFinderBitmap;
+            finderBitmap = finder.ShowMinutiae(thinFinderBitmap);
+            pictureBoxNew.Image = finderBitmap;
 
-            //pictureBoxNew.Image = sobelBitmap2;
         }
     }
 }

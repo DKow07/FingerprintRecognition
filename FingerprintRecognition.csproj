@@ -52,6 +52,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="ImageOperations\ImageUtils.cs" />
+    <Compile Include="ImageOperations\MinutiaeFinder.cs" />
     <Compile Include="ImageOperations\MorphologicalOperations.cs" />
     <Compile Include="ImageOperations\SobelOperation.cs" />
     <Compile Include="ImageOperations\Thinning.cs" />
