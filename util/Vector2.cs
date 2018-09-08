@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FingerprintRecognition.util
+namespace FingerprintRecognition
 {
     public class Vector2
     {
+
         public double x;
         public double y;
 

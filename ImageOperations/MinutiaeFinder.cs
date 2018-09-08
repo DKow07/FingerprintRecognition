@@ -10,9 +10,17 @@ namespace FingerprintRecognition.ImageOperations
 {
     public class MinutiaeFinder
     {
+        private List<Minutiae> minutiaesWithoutAngles;
+        private List<Minutiae> minutiaes;
+
         public Bitmap ShowMinutiae(Bitmap originalBitmap)
         {
             return CalculateMinutiaePosition(originalBitmap);
+        }
+
+        public List<Minutiae> getMinutiaesWithoutAngles()
+        {
+            return minutiaesWithoutAngles;
         }
 
         private Bitmap CalculateMinutiaePosition(Bitmap bitmapMinutiae)
@@ -22,6 +30,7 @@ namespace FingerprintRecognition.ImageOperations
             int pixelSize = 4;
             int width = newBitmap.Width;
             int height = newBitmap.Height;
+            minutiaesWithoutAngles = new List<Minutiae>();
             unsafe
             {
                 for (int y = 1; y < height - 1; y++)
@@ -42,14 +51,17 @@ namespace FingerprintRecognition.ImageOperations
                             if (cn == 1)
                             {
                                 DrawMinutiae(x, y, Pens.Red, ref drawBitmap);
+                                minutiaesWithoutAngles.Add(new Minutiae(x, y, -1, MinutiaeType.RIDGE_ENDING));
                             }
                             else if (cn == 4)
                             {
                                 DrawMinutiae(x, y, Pens.Gold, ref drawBitmap);
+                                minutiaesWithoutAngles.Add(new Minutiae(x, y, -1, MinutiaeType.CROSSOVER));
                             }
                             else if (cn == 3)
                             {
                                 DrawMinutiae(x, y, Pens.Blue, ref drawBitmap);
+                                minutiaesWithoutAngles.Add(new Minutiae(x, y, -1, MinutiaeType.BIFURCATION));
                             }
 
                         }
@@ -59,6 +71,12 @@ namespace FingerprintRecognition.ImageOperations
             return drawBitmap;
         }
 
+        public List<Minutiae> getMinutiaesWithAngles(double[,] angles)
+        {
+            minutiaesWithoutAngles.ForEach(m => m.Angle = angles[m.Y, m.X]);
+            minutiaes = new List<Minutiae>(minutiaesWithoutAngles);
+            return minutiaes;
+        }
 
         private unsafe int CalculateCrossingNumber(int x, int y, Bitmap bitmapMinutiae)
         {

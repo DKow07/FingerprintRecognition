@@ -1,6 +1,7 @@
 ﻿using FingerprintRecognition.util;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -25,36 +26,53 @@ namespace FingerprintRecognition.ImageOperations
         private static int[,] CalculateBitmapWithMask(Bitmap originalBitmap, int[,] mask)
         {
             Bitmap newBitmap = new Bitmap(originalBitmap);
-            BitmapData bitmapData = newBitmap.LockBits(new Rectangle(0, 0, newBitmap.Width, newBitmap.Height),
-                                 System.Drawing.Imaging.ImageLockMode.ReadWrite,
-                                 newBitmap.PixelFormat);
-            int pixelSize = 4;
+           // BitmapData bitmapData = newBitmap.LockBits(new Rectangle(0, 0, newBitmap.Width, newBitmap.Height),
+           //                      System.Drawing.Imaging.ImageLockMode.ReadWrite,
+          //                       newBitmap.PixelFormat);
+          //  int pixelSize = 4;
 
-            int[,] resultArray = new int[bitmapData.Height, bitmapData.Width]; //czy są zera
+            int bitmapY = newBitmap.Height;
+            int bitmapX = newBitmap.Width;
+
+            int[,] resultArray = new int[bitmapY, bitmapX]; 
 
             unsafe
             {
-                for (int y = 0; y < bitmapData.Height; y++)
+                for (int y = 1; y < bitmapY-1; y++)
                 {
-                    byte* row = (byte*)bitmapData.Scan0 + (y * bitmapData.Stride);
-                    for (int x = 0; x < bitmapData.Width; x++)
+                    //byte* row = (byte*)bitmapData.Scan0 + (y * bitmapData.Stride);
+                    for (int x = 1; x < bitmapX-1; x++)
                     {
                         int sum = 0;
                         for (int k = -1; k < 2; k++)
                         {
                             for (int h = -1; h < 2; h++)
                             {
-                                int bitmapValue = PixelToInt(row[x * pixelSize], row[x * pixelSize + 1], row[x * pixelSize + 2]);
+                                //int bitmapValue = PixelToInt(row[x * pixelSize], row[x * pixelSize + 1], row[x * pixelSize + 2]);
+                                int bitmapValue = PixelToInt2(newBitmap.GetPixel(x + k, y + h));
                                 int sobelValue = mask[k + 1, h + 1];
                                 sum += bitmapValue * sobelValue;
                             }
                         }
                         resultArray[y, x] = sum;
+                        Debug.Print(sum + "");
                     }
                 }
             }
-            newBitmap.UnlockBits(bitmapData);
+            //newBitmap.UnlockBits(bitmapData);
             return resultArray;
+        }
+
+        private static int PixelToInt2(Color color)
+        {
+            if (color.ToArgb() == Color.Black.ToArgb())
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         private static int PixelToInt(byte r, byte g, byte b)
@@ -94,6 +112,7 @@ namespace FingerprintRecognition.ImageOperations
                         }
 
                         gradientArray[j, i] = new Vector2(array1[j, i], array2[j, i]);
+                        //Debug.Print("GradientArray " + gradientArray[j,i].x + " " + gradientArray[j,i].y);
                     }
                 }
             }
@@ -117,9 +136,14 @@ namespace FingerprintRecognition.ImageOperations
                         angles[j, i] = 0;
                     }
                     angles[j, i] = array[j, i].GetAngleBetweenVectorAndOx();
+                
                     if (Double.IsNaN(angles[j, i]))
                     {
                         angles[j, i] = 0;
+                    }
+                    else
+                    {
+                       Debug.Print(angles[j, i] + "");
                     }
                 }
             }
@@ -154,11 +178,12 @@ namespace FingerprintRecognition.ImageOperations
                             {
                                 int x = i + l;
                                 int y = j + k;
-
+                               
                                 if (array[y, x] != 0)
                                 {
                                     cnt++;
                                     sum += array[y, x];
+                                    //Debug.Print(sum+"");
                                 }
                             }
                         }
@@ -171,6 +196,7 @@ namespace FingerprintRecognition.ImageOperations
                         if(row[i * pixelSize] == 0 && row[i * pixelSize + 1] == 0 && row[i * pixelSize + 2] == 0)
                         {
                             angles[j, i] = sum;
+                            //Debug.Print(sum+"");
                         }
                     }
                 }

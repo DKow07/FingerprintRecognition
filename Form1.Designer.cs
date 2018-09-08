@@ -254,6 +254,7 @@
             this.buttonScann.TabIndex = 9;
             this.buttonScann.Text = "Scann";
             this.buttonScann.UseVisualStyleBackColor = true;
+            this.buttonScann.Click += new System.EventHandler(this.buttonScann_Click);
             // 
             // labelScannInfo
             // 
