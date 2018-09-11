@@ -50,20 +50,19 @@ namespace FingerprintRecognition.ImageOperations
 
                             if (cn == 1)
                             {
-                                DrawMinutiae(x, y, Pens.Red, ref drawBitmap);
-                                minutiaesWithoutAngles.Add(new Minutiae(x, y, -1, MinutiaeType.RIDGE_ENDING));
+                            //    DrawMinutiae(x, y, Pens.Red, ref drawBitmap);
+                            //    minutiaesWithoutAngles.Add(new Minutiae(x, y, -1, MinutiaeType.RIDGE_ENDING));
                             }
                             else if (cn == 4)
                             {
-                                DrawMinutiae(x, y, Pens.Gold, ref drawBitmap);
-                                minutiaesWithoutAngles.Add(new Minutiae(x, y, -1, MinutiaeType.CROSSOVER));
+                             //   DrawMinutiae(x, y, Pens.Gold, ref drawBitmap);
+                             //   minutiaesWithoutAngles.Add(new Minutiae(x, y, -1, MinutiaeType.CROSSOVER));
                             }
                             else if (cn == 3)
                             {
                                 DrawMinutiae(x, y, Pens.Blue, ref drawBitmap);
                                 minutiaesWithoutAngles.Add(new Minutiae(x, y, -1, MinutiaeType.BIFURCATION));
                             }
-
                         }
                     }
                 }
@@ -73,7 +72,7 @@ namespace FingerprintRecognition.ImageOperations
 
         public List<Minutiae> getMinutiaesWithAngles(double[,] angles)
         {
-            minutiaesWithoutAngles.ForEach(m => m.Angle = angles[m.Y, m.X]);
+            minutiaesWithoutAngles.ForEach(m => m.Angle = Math.Floor(angles[m.Y, m.X]));
             minutiaes = new List<Minutiae>(minutiaesWithoutAngles);
             return minutiaes;
         }

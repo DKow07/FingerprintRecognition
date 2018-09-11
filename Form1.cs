@@ -1,4 +1,5 @@
 ﻿using FingerprintRecognition.ImageOperations;
+using FingerprintRecognition.Matching;
 using FingerprintRecognition.Utils;
 using System;
 using System.Collections.Generic;
@@ -87,12 +88,12 @@ namespace FingerprintRecognition
 
             if (result == 0)
             {
-                labelScannInfo.Text = "Scann Succeed: " + userID + "(" + subID + ")";
+                labelScannInfo.Text = "Scan success"; //"Scann Succeed: " + userID + "(" + subID + ")";
                 labelScannInfo.Refresh();
             }
             else
             {
-                labelScannInfo.Text = "Scann Succes - ";
+                labelScannInfo.Text = "Error";
                 labelScannInfo.Refresh();
             }
 
@@ -192,6 +193,9 @@ namespace FingerprintRecognition
 
         #endregion
 
+        private Bitmap originalBitmap;
+        private Bitmap newBitmap;
+
         public Form1()
         {
             InitializeComponent();
@@ -249,23 +253,76 @@ namespace FingerprintRecognition
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "JPG|*.jpg|PNG|*.png"; 
-            openFileDialog.ShowDialog();
+            openFileDialog.ShowDialog(); //zabezpieczyć przed nullem
             string path = openFileDialog.FileName;
-            Bitmap bitmap = (Bitmap)Image.FromFile(path);
-            Bitmap newBitmap = ImageUtils.Binarized(bitmap, 100);
-            pictureBoxOriginal.Image = newBitmap;
-            Bitmap thinBitmap = Thinning.Thin(newBitmap);
+            originalBitmap = (Bitmap)Bitmap.FromFile(path);
+            originalBitmap = Thinning.Thin(originalBitmap);
             MinutiaeFinder finder = new MinutiaeFinder();
-            Bitmap finderBitmap = finder.ShowMinutiae(thinBitmap);
-            pictureBoxNew.Image = finderBitmap;
-            double[,] angles = SobelOperation.CalculateAngles(newBitmap);
-            List<Minutiae> minutiaes = finder.getMinutiaesWithAngles(angles);
-            minutiaes.ForEach(m => Debug.Print(m.ToString()));
+            Bitmap bitmap = finder.ShowMinutiae(originalBitmap);
+            pictureBoxOriginal.Image = bitmap;
         }
 
         private void buttonScann_Click(object sender, EventArgs e)
         {
+            identifyButton_Click(sender, e);
+        }
 
+        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void openFingerprintToMatchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "JPG|*.jpg|PNG|*.png";
+            openFileDialog.ShowDialog();
+            string path = openFileDialog.FileName;
+            newBitmap = (Bitmap)Bitmap.FromFile(path);
+            newBitmap = Thinning.Thin(newBitmap);
+            MinutiaeFinder finder = new MinutiaeFinder();
+            Bitmap bitmap = finder.ShowMinutiae(newBitmap);
+            pictureBoxNew.Image = bitmap;
+        }
+
+        private void matchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Debug.Print("Start");
+            if (originalBitmap != null && newBitmap != null)
+            {
+                List<Minutiae> originalMinutiaes = GetMinutiaesFromBitmap(originalBitmap);
+                Debug.Print("Original minutiaes");
+                originalMinutiaes.ForEach(m => Debug.Print(m.ToString()));
+                List<Minutiae> newMinutiaes = GetMinutiaesFromBitmap(newBitmap);
+                Debug.Print("New minutiaes");
+                newMinutiaes.ForEach(m => Debug.Print(m.ToString()));
+                TranslationVotes votes = MatchingFingerprints.Matching(originalMinutiaes, newMinutiaes);
+                Debug.Print("Najlepsze dopasowanie x = " + votes.DeltaX + " y =  " + votes.DeltaY + " theta = " + votes.DeltaTheta);
+                //TranslationVotes tmpVotes = new TranslationVotes(239, 99, 180);
+                if(MatchingFingerprints.IsIdentical(originalMinutiaes, newMinutiaes, votes))
+                {
+                    Debug.Print("Access allowed");
+                    MessageBox.Show(Guid.NewGuid().ToString("n").Substring(0, 8));
+                }
+                else
+                {
+                    Debug.Print("Access denied");
+                    MessageBox.Show("Access denied");
+                }
+                
+            }
+            else
+            {
+                Debug.Print("NULL");
+            }
+        }
+
+        private List<Minutiae> GetMinutiaesFromBitmap(Bitmap bitmap)
+        {
+            MinutiaeFinder finder = new MinutiaeFinder();
+            finder.ShowMinutiae(bitmap);
+            double[,] angles = SobelOperation.CalculateAngles(bitmap);
+            return finder.getMinutiaesWithAngles(angles);
         }
     }
 }

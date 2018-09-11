@@ -55,7 +55,7 @@ namespace FingerprintRecognition.ImageOperations
                             }
                         }
                         resultArray[y, x] = sum;
-                        Debug.Print(sum + "");
+                        //Debug.Print(sum + "");
                     }
                 }
             }
@@ -143,7 +143,7 @@ namespace FingerprintRecognition.ImageOperations
                     }
                     else
                     {
-                       Debug.Print(angles[j, i] + "");
+                       //Debug.Print(angles[j, i] + "");
                     }
                 }
             }

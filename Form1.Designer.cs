@@ -42,6 +42,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFingerprintToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFingerprintToMatchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.matchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBoxOriginal = new System.Windows.Forms.PictureBox();
@@ -201,28 +203,45 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openFingerprintToolStripMenuItem,
+            this.openFingerprintToMatchToolStripMenuItem,
+            this.matchToolStripMenuItem,
             this.toolStripMenuItem2,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
+            this.fileToolStripMenuItem.Click += new System.EventHandler(this.fileToolStripMenuItem_Click);
             // 
             // openFingerprintToolStripMenuItem
             // 
             this.openFingerprintToolStripMenuItem.Name = "openFingerprintToolStripMenuItem";
-            this.openFingerprintToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.openFingerprintToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
             this.openFingerprintToolStripMenuItem.Text = "Open fingerprint";
             this.openFingerprintToolStripMenuItem.Click += new System.EventHandler(this.openFingerprintToolStripMenuItem_Click);
+            // 
+            // openFingerprintToMatchToolStripMenuItem
+            // 
+            this.openFingerprintToMatchToolStripMenuItem.Name = "openFingerprintToMatchToolStripMenuItem";
+            this.openFingerprintToMatchToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
+            this.openFingerprintToMatchToolStripMenuItem.Text = "Open fingerprint to match";
+            this.openFingerprintToMatchToolStripMenuItem.Click += new System.EventHandler(this.openFingerprintToMatchToolStripMenuItem_Click);
+            // 
+            // matchToolStripMenuItem
+            // 
+            this.matchToolStripMenuItem.Name = "matchToolStripMenuItem";
+            this.matchToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
+            this.matchToolStripMenuItem.Text = "Match";
+            this.matchToolStripMenuItem.Click += new System.EventHandler(this.matchToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(159, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(210, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // pictureBoxOriginal
@@ -248,6 +267,7 @@
             // buttonScann
             // 
             this.buttonScann.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonScann.Enabled = false;
             this.buttonScann.Location = new System.Drawing.Point(10, 54);
             this.buttonScann.Name = "buttonScann";
             this.buttonScann.Size = new System.Drawing.Size(194, 27);
@@ -357,6 +377,8 @@
         private System.Windows.Forms.ToolStripMenuItem openFingerprintToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openFingerprintToMatchToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem matchToolStripMenuItem;
     }
 }
 
