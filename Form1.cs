@@ -1,5 +1,6 @@
 ﻿using FingerprintRecognition.ImageOperations;
 using FingerprintRecognition.Matching;
+using FingerprintRecognition.models;
 using FingerprintRecognition.Utils;
 using System;
 using System.Collections.Generic;
@@ -255,11 +256,14 @@ namespace FingerprintRecognition
             openFileDialog.Filter = "JPG|*.jpg|PNG|*.png"; 
             openFileDialog.ShowDialog(); //zabezpieczyć przed nullem
             string path = openFileDialog.FileName;
-            originalBitmap = (Bitmap)Bitmap.FromFile(path);
-            originalBitmap = Thinning.Thin(originalBitmap);
-            MinutiaeFinder finder = new MinutiaeFinder();
-            Bitmap bitmap = finder.ShowMinutiae(originalBitmap);
-            pictureBoxOriginal.Image = bitmap;
+            if (path != null)
+            {
+                originalBitmap = (Bitmap)Bitmap.FromFile(path);
+                originalBitmap = Thinning.Thin(originalBitmap);
+                MinutiaeFinder finder = new MinutiaeFinder();
+                Bitmap bitmap = finder.ShowMinutiae(originalBitmap);
+                pictureBoxOriginal.Image = bitmap;
+            }
         }
 
         private void buttonScann_Click(object sender, EventArgs e)
@@ -278,11 +282,14 @@ namespace FingerprintRecognition
             openFileDialog.Filter = "JPG|*.jpg|PNG|*.png";
             openFileDialog.ShowDialog();
             string path = openFileDialog.FileName;
-            newBitmap = (Bitmap)Bitmap.FromFile(path);
-            newBitmap = Thinning.Thin(newBitmap);
-            MinutiaeFinder finder = new MinutiaeFinder();
-            Bitmap bitmap = finder.ShowMinutiae(newBitmap);
-            pictureBoxNew.Image = bitmap;
+            if (path != null)
+            {
+                newBitmap = (Bitmap)Bitmap.FromFile(path);
+                newBitmap = Thinning.Thin(newBitmap);
+                MinutiaeFinder finder = new MinutiaeFinder();
+                Bitmap bitmap = finder.ShowMinutiae(newBitmap);
+                pictureBoxNew.Image = bitmap;
+            }
         }
 
         private void matchToolStripMenuItem_Click(object sender, EventArgs e)
@@ -291,15 +298,20 @@ namespace FingerprintRecognition
             if (originalBitmap != null && newBitmap != null)
             {
                 List<Minutiae> originalMinutiaes = GetMinutiaesFromBitmap(originalBitmap);
-                Debug.Print("Original minutiaes");
-                originalMinutiaes.ForEach(m => Debug.Print(m.ToString()));
                 List<Minutiae> newMinutiaes = GetMinutiaesFromBitmap(newBitmap);
-                Debug.Print("New minutiaes");
-                newMinutiaes.ForEach(m => Debug.Print(m.ToString()));
-                TranslationVotes votes = MatchingFingerprints.Matching(originalMinutiaes, newMinutiaes);
-                Debug.Print("Najlepsze dopasowanie x = " + votes.DeltaX + " y =  " + votes.DeltaY + " theta = " + votes.DeltaTheta);
-                //TranslationVotes tmpVotes = new TranslationVotes(239, 99, 180);
-                if(MatchingFingerprints.IsIdentical(originalMinutiaes, newMinutiaes, votes))
+                
+                List<Minutiae> mock1 = new List<Minutiae>();
+                mock1.Add(new Minutiae(10, 10, 0, MinutiaeType.BIFURCATION));
+                List<Minutiae> mock2 = new List<Minutiae>();
+                mock2.Add(new Minutiae(1, 1, 0, MinutiaeType.BIFURCATION));
+                
+
+                Matcher matcher = new Matcher(originalBitmap.Width, originalBitmap.Height, 10);
+                Translation translation = matcher.Matching(originalMinutiaes, newMinutiaes);
+                Debug.Print("Najlepsze dopasowanie x = " + translation.X + " y =  " + translation.Y + " theta = " + translation.T);
+                
+                
+               /* if (MatchingFingerprints.IsIdentical(originalMinutiaes, newMinutiaes, votes))
                 {
                     Debug.Print("Access allowed");
                     MessageBox.Show(Guid.NewGuid().ToString("n").Substring(0, 8));
@@ -308,7 +320,7 @@ namespace FingerprintRecognition
                 {
                     Debug.Print("Access denied");
                     MessageBox.Show("Access denied");
-                }
+                }*/
                 
             }
             else

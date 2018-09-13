@@ -99,7 +99,7 @@ namespace FingerprintRecognition.Matching
 
         public override string ToString()
         {
-            return "x = " + this.DeltaX + " y =  " + this.DeltaY + " theta = " + this.DeltaTheta + " votes = " + this.Votes;
+            return "x = " + this.DeltaX + " y =  " + this.DeltaY + " theta = " + this.DeltaTheta;
         }
     }
 }

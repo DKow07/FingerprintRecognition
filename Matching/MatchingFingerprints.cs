@@ -6,18 +6,33 @@ using System.Text;
 using System.Threading.Tasks;
 using MathNet.Numerics.LinearAlgebra;
 using System.Diagnostics;
+using FingerprintRecognition.models;
 
 namespace FingerprintRecognition.Matching
 {
     public class MatchingFingerprints
     {
+      /*  private static double[] anglesArray;
+        private static double theta_base = 180;
+        private static int[, ,] accumulator;
+        private static int xLength;
+        private static int yLength;
+        private static int angleLength;
+        private static int angleStep;
 
-        private static double[] anglesArray;
-
-        private static double theta_base = 300;
         
+        public static void SetAccumulatorDimension(int bitmapWidth, int bitmapHeight)
+        {
+            xLength = bitmapWidth;
+            yLength = bitmapHeight;
+            angleLength = 36;
+
+            accumulator = new int[xLength, yLength, angleLength];
+        }
+
         private static void InitAnglesArray(int step)
         {
+            angleStep = step;
             int count = 360 / step;
             anglesArray = new double[count];
             for(int i = 0; i < anglesArray.Length; i++)
@@ -28,34 +43,93 @@ namespace FingerprintRecognition.Matching
 
         public static TranslationVotes Matching(List<Minutiae> minutiaesOriginal, List<Minutiae> minutiaesScann)
         {
-            InitAnglesArray(10);
-
-            List<double> angles = anglesArray.ToList();
-            //Dictionary<Minutiae, int> votes = new Dictionary<Minutiae, int>();
-            Votes votes = new Votes();
-
+            InitAnglesArray(10);       
             for(int mi = 0; mi < minutiaesOriginal.Count; mi++)
             {
                 for(int mj = 0; mj < minutiaesScann.Count; mj++)
                 {
                     Minutiae m1 = minutiaesOriginal[mi];
                     Minutiae m2 = minutiaesScann[mj];
-                    for(int t = 0; t < angles.Count; t++)
+                    for(int t = 0; t < anglesArray.Length; t++)
                     {
-                        double theta = angles[t];
+                        double theta = anglesArray[t];
 
                         if (dd(m2.Angle + theta, m1.Angle) < theta_base)
                         {
                             Vector2 position = CalculateNewPosition(m1, m2, theta);
-                            votes.Check(Convert.ToInt32(position.x), Convert.ToInt32(position.y), theta);
+                            try
+                            {
+                                int x = Convert.ToInt32(position.x);
+                                int y = Convert.ToInt32(position.y);
+                                int tt = Convert.ToInt32(theta);
+
+                                if (IsInside(x,y,tt))
+                                {
+                                    accumulator[x, y, tt]++;
+                                    VoteNeighberhood(x, y, tt);
+                                }
+                            }
+                            catch(Exception e)
+                            {
+                                Debug.Print(Convert.ToInt32(position.x) + " " + Convert.ToInt32(position.y) + " " + Convert.ToInt32(theta));
+                            }
                         }
                     }
                 }
             }
 
-            votes.Print();
+            Coordinate coordinate = FindOptimalTransformationInAccumulator();
+            return new TranslationVotes(coordinate.IndexJ, coordinate.IndexI, coordinate.IndexK);
+        }
 
-            return votes.GetTranslationVotesByMaxVotes();
+        private static void VoteNeighberhood(int x, int y, int t)
+        {
+            for (int i = -1; i < 1; i++)
+            {
+                for (int j = -1; j < 1; j++)
+                {
+                    for (int k = -1; k < 1; k++)
+                    {
+                        if(IsInside(x+i, y+j, t+k))
+                        {
+                            accumulator[x + i, y + j, t + k]++;
+                        }
+                    }
+                }
+            }
+        }
+
+        private static bool IsInside(int x, int y, int t)
+        {
+            return x >= 0 && x < xLength &&
+                  y >= 0 && y < yLength &&
+                  t >= 0 && t < angleLength;
+        }
+
+       /* private static Coordinate FindOptimalTransformationInAccumulator()
+        {
+            int max = accumulator[0, 0, 0];
+            int indexI = 0, indexJ = 0, indexK = 0;
+
+            for (int i = 1; i < accumulator.GetLength(0); i++)
+            {
+                for (int j = 1; j < accumulator.GetLength(1); j++)
+                {
+                    for (int k = 1; k < accumulator.GetLength(2); k++)
+                    {
+                        int tmpValue = accumulator[i,j,k];
+                        if(tmpValue > max)
+                        {
+                            max = tmpValue;
+                            indexI = i;
+                            indexJ = j;
+                            indexK = k;
+                        }
+                    }
+                }
+            }
+
+            return new Coordinate(indexI,indexJ,indexK);
         }
 
         private static double percentTolerance = 0.7;
@@ -111,10 +185,10 @@ namespace FingerprintRecognition.Matching
             Matrix<double> matrixAngle = Matrix<double>.Build.Dense(2, 2);
             Matrix<double> matrixJ = Matrix<double>.Build.Dense(2, 1);
 
-            matrixI[0, 0] = m1.X;
-            matrixI[1, 0] = m1.Y;
-            matrixJ[0, 0] = m2.X;
-            matrixJ[1, 0] = m2.Y;
+            matrixI[0, 0] = m2.X; //m1
+            matrixI[1, 0] = m2.Y;
+            matrixJ[0, 0] = m1.X;
+            matrixJ[1, 0] = m1.Y;
 
             matrixAngle[0,0] = Math.Cos(t);
             matrixAngle[1,0] = -Math.Sin(t);
@@ -123,14 +197,13 @@ namespace FingerprintRecognition.Matching
 
             Matrix<double> multiplyMatrix = matrixAngle.Multiply(matrixJ);
             Matrix<double> result = matrixI.Subtract(multiplyMatrix);
-            //Debug.Print(result[0,0] + " " + result[1, 0]);
             return new Vector2(Math.Round(result[0, 0]), Math.Round(result[1, 0]));
         }
 
         private static double dd(double d1, double d2)
         {
-            //return d1 - d2;
-            return Math.Min(Math.Abs(d1 - d2), Math.Abs(d1 + Math.PI - d2));
-        }
+            return d1 - d2;
+            //return Math.Min(Math.Abs(d1 - d2), Math.Abs(d1 + Math.PI - d2));
+        }*/
     }
 }

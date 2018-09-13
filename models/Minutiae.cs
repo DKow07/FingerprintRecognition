@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 
-namespace FingerprintRecognition.ImageOperations
+namespace FingerprintRecognition.models
 {
+    [Serializable]
     public class Minutiae
     {
         public int X { get; set; }
@@ -25,13 +22,15 @@ namespace FingerprintRecognition.ImageOperations
 
         public override string ToString()
         {
-            return "Minucja x = " + X + ", y = " + Y + ", kąt = " + Angle + ", typ = " + Type;
+            return "Minucja x = " + X + ", y = " + Y + ", k�t = " + Angle + ", typ = " + Type;
         }
 
         public bool Compare(Minutiae other)
         {
-            int toleranceDistance = 70;
-            double toleranceAngle = 60;
+            int toleranceDistance = 70; //70
+            double toleranceAngle = 60; //60
+
+            //Debug.Print(this.X + " " + other.X + " " + this.Y + " " + other.Y + " " + this.Angle + " " + other.Angle);
 
             if(Math.Abs(this.X - other.X) <= toleranceDistance 
                 && Math.Abs(this.Y - other.Y) <= toleranceDistance 
@@ -59,4 +58,5 @@ namespace FingerprintRecognition.ImageOperations
         BIFURCATION,
         CROSSOVER
     }
+    
 }

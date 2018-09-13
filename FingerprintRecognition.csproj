@@ -36,6 +36,7 @@
     <Reference Include="MathNet.Numerics">
       <HintPath>packages\MathNet.Numerics.4.5.1\lib\net40\MathNet.Numerics.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
@@ -50,23 +51,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DAL\DbJSONSerializer.cs" />
+    <Compile Include="models\Fingerprints.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="DAL\IDbSerializable.cs" />
     <Compile Include="ImageOperations\ImageUtils.cs" />
-    <Compile Include="ImageOperations\Minutiae.cs" />
     <Compile Include="ImageOperations\MinutiaeFinder.cs" />
     <Compile Include="ImageOperations\MorphologicalOperations.cs" />
     <Compile Include="ImageOperations\SobelOperation.cs" />
     <Compile Include="ImageOperations\Thinning.cs" />
+    <Compile Include="Matching\Matcher.cs" />
+    <Compile Include="Matching\MatcherWithDb.cs" />
     <Compile Include="Matching\MatchingFingerprints.cs" />
     <Compile Include="Matching\TranslationVotes.cs" />
+    <Compile Include="models\Minutiae.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Connection\Connection.cs" />
+    <Compile Include="models\Translation.cs" />
+    <Compile Include="models\UserFingerprint.cs" />
     <Compile Include="util\ProgressEventArgs.cs" />
     <Compile Include="util\Vector2.cs" />
     <EmbeddedResource Include="Form1.resx">
