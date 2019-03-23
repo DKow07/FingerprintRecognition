@@ -1,4 +1,5 @@
-﻿using FingerprintRecognition.ImageOperations;
+﻿using FingerprintRecognition.DAL;
+using FingerprintRecognition.ImageOperations;
 using FingerprintRecognition.Matching;
 using FingerprintRecognition.models;
 using FingerprintRecognition.Utils;
@@ -258,11 +259,14 @@ namespace FingerprintRecognition
             string path = openFileDialog.FileName;
             if (path != null)
             {
+                //originalBitmap = (Bitmap)Bitmap.FromFile(path);
+                //originalBitmap = Thinning.Thin(originalBitmap);
+                //MinutiaeFinder finder = new MinutiaeFinder();
+                //Bitmap bitmap = finder.ShowMinutiae(originalBitmap);
+                //pictureBoxOriginal.Image = bitmap;
                 originalBitmap = (Bitmap)Bitmap.FromFile(path);
-                originalBitmap = Thinning.Thin(originalBitmap);
-                MinutiaeFinder finder = new MinutiaeFinder();
-                Bitmap bitmap = finder.ShowMinutiae(originalBitmap);
-                pictureBoxOriginal.Image = bitmap;
+                pictureBoxOriginal.Image = originalBitmap;
+                pictureBoxNew.Image = originalBitmap;
             }
         }
 
@@ -308,19 +312,19 @@ namespace FingerprintRecognition
 
                 Matcher matcher = new Matcher(originalBitmap.Width, originalBitmap.Height, 10);
                 Translation translation = matcher.Matching(originalMinutiaes, newMinutiaes);
-                Debug.Print("Najlepsze dopasowanie x = " + translation.X + " y =  " + translation.Y + " theta = " + translation.T);
+                MatchingFingerprints.SetAccumulatorDimension(originalBitmap.Width, originalBitmap.Height);
+                TranslationVotes votes = MatchingFingerprints.Matching(originalMinutiaes, newMinutiaes);
                 
-                
-               /* if (MatchingFingerprints.IsIdentical(originalMinutiaes, newMinutiaes, votes))
+                if (MatchingFingerprints.IsIdentical(originalMinutiaes, newMinutiaes, votes))
                 {
                     Debug.Print("Access allowed");
-                    MessageBox.Show(Guid.NewGuid().ToString("n").Substring(0, 8));
+                    MessageBox.Show("Access allowed");
                 }
                 else
                 {
                     Debug.Print("Access denied");
                     MessageBox.Show("Access denied");
-                }*/
+                }
                 
             }
             else
@@ -335,6 +339,55 @@ namespace FingerprintRecognition
             finder.ShowMinutiae(bitmap);
             double[,] angles = SobelOperation.CalculateAngles(bitmap);
             return finder.getMinutiaesWithAngles(angles);
+        }
+
+        private void createDbToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CreateDB();
+        }
+
+        private void CreateDB()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "JPG|*.jpg|PNG|*.png";
+            openFileDialog.Multiselect = true;
+            openFileDialog.ShowDialog();
+            List<UserFingerprint> userFingerprints = new List<UserFingerprint>();
+            foreach (String file in openFileDialog.FileNames)
+            {
+                Bitmap bitmap = (Bitmap)Bitmap.FromFile(file);
+                bitmap = Thinning.Thin(bitmap);
+                List<Minutiae> minutiaes = GetMinutiaesFromBitmap(bitmap);
+                userFingerprints.Add(new UserFingerprint(file, minutiaes));
+            }
+            Fingerprints fingerprints = new Fingerprints(userFingerprints);
+            DbJSONSerializer db = new DbJSONSerializer();
+            db.WriteToFile(db.SerializeMinutiaes(fingerprints), "db_fingerprints.json");
+        }
+
+        private void matchWithDbToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bool isMatched = false;
+            List<Minutiae> originalMinutiaes = GetMinutiaesFromBitmap(originalBitmap);
+            DbJSONSerializer db = new DbJSONSerializer();
+            Fingerprints fingerprints = db.DeserializeMinutiaes(db.ReadFromJsonFile("db_fingerprints.json"));
+            List<UserFingerprint> userFingerPrint = fingerprints.userFingerprints;
+            foreach(UserFingerprint uf in userFingerPrint)
+            {
+                Debug.Print("Porównuje " + uf.name);
+                MatchingFingerprints.SetAccumulatorDimension(originalBitmap.Width, originalBitmap.Height);
+                TranslationVotes votes = MatchingFingerprints.Matching(originalMinutiaes, uf.minutiaes);
+                if (MatchingFingerprints.IsIdentical(originalMinutiaes, uf.minutiaes, votes))
+                {
+                    isMatched = true;
+                    MessageBox.Show(uf.name);
+                    break;
+                }
+            }
+            if(!isMatched)
+            {
+                MessageBox.Show("Brak usera w bazie");
+            }
         }
     }
 }

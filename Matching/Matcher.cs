@@ -30,7 +30,7 @@ namespace FingerprintRecognition.Matching
             accumulator.Initialize();
         }
 
-        private Vector2 getOffset(Minutiae m1, Minutiae m2, double angle)
+        private Vector2 GetOffset(Minutiae m1, Minutiae m2, double angle)
         {
             double offsetX = m1.X - (Math.Cos(angle) * m2.X - Math.Sin(angle) * m2.Y);
             double offsetY = m1.Y - (Math.Sin(angle) * m2.X + Math.Cos(angle) * m2.Y);
@@ -54,7 +54,7 @@ namespace FingerprintRecognition.Matching
                         {
                             try
                             {
-                                Vector2 position = getOffset(m1, m2, theta);// CalculateNewPosition(m1, m2, theta);
+                                Vector2 position = GetOffset(m1, m2, theta);// CalculateNewPosition(m1, m2, theta);
                                 int x = Convert.ToInt32(position.x);
                                 int y = Convert.ToInt32(position.y);
                                 int tt = Convert.ToInt32(theta);
@@ -147,7 +147,6 @@ namespace FingerprintRecognition.Matching
             int y = optimalTranslation.Y - bitmapHeight;
             int t = optimalTranslation.T * 10;
             Translation translation = new Translation(x, y, t);
-            Debug.Print("GetTranslation " + translation.ToString());
             return translation;
         }
 
@@ -177,7 +176,6 @@ namespace FingerprintRecognition.Matching
             }
 
             Translation translation = new Translation(indexI, indexJ, indexK);
-            Debug.Print("OptimalTranslation " + translation.ToString());
             return translation;
         }
 

@@ -11,7 +11,6 @@ namespace FingerprintRecognition.Utils
 {
     public class Connection
     {
-
         [DllImport("SFM_SDK.dll",
            CharSet = CharSet.Ansi,
            EntryPoint = "UF_InitCommPort")]

@@ -12,7 +12,7 @@ namespace FingerprintRecognition.Matching
 {
     public class MatchingFingerprints
     {
-      /*  private static double[] anglesArray;
+        private static double[] anglesArray;
         private static double theta_base = 180;
         private static int[, ,] accumulator;
         private static int xLength;
@@ -20,11 +20,10 @@ namespace FingerprintRecognition.Matching
         private static int angleLength;
         private static int angleStep;
 
-        
         public static void SetAccumulatorDimension(int bitmapWidth, int bitmapHeight)
         {
-            xLength = bitmapWidth;
-            yLength = bitmapHeight;
+            xLength = bitmapWidth * 2;
+            yLength = bitmapHeight * 2;
             angleLength = 36;
 
             accumulator = new int[xLength, yLength, angleLength];
@@ -62,7 +61,7 @@ namespace FingerprintRecognition.Matching
                                 int x = Convert.ToInt32(position.x);
                                 int y = Convert.ToInt32(position.y);
                                 int tt = Convert.ToInt32(theta);
-
+                            
                                 if (IsInside(x,y,tt))
                                 {
                                     accumulator[x, y, tt]++;
@@ -78,8 +77,8 @@ namespace FingerprintRecognition.Matching
                 }
             }
 
-            Coordinate coordinate = FindOptimalTransformationInAccumulator();
-            return new TranslationVotes(coordinate.IndexJ, coordinate.IndexI, coordinate.IndexK);
+            Translation coordinate = FindOptimalTransformationInAccumulator();
+            return new TranslationVotes(coordinate.Y, coordinate.X, coordinate.T);
         }
 
         private static void VoteNeighberhood(int x, int y, int t)
@@ -106,7 +105,7 @@ namespace FingerprintRecognition.Matching
                   t >= 0 && t < angleLength;
         }
 
-       /* private static Coordinate FindOptimalTransformationInAccumulator()
+        private static Translation FindOptimalTransformationInAccumulator()
         {
             int max = accumulator[0, 0, 0];
             int indexI = 0, indexJ = 0, indexK = 0;
@@ -129,7 +128,7 @@ namespace FingerprintRecognition.Matching
                 }
             }
 
-            return new Coordinate(indexI,indexJ,indexK);
+            return new Translation(indexI,indexJ,indexK);
         }
 
         private static double percentTolerance = 0.7;
@@ -153,7 +152,6 @@ namespace FingerprintRecognition.Matching
                 }
             }
 
-            Debug.Print("Tolerance = " + tolerance + " matched = " + matchedMinutiaes);
             return matchedMinutiaes >= tolerance;
         }
 
@@ -204,6 +202,6 @@ namespace FingerprintRecognition.Matching
         {
             return d1 - d2;
             //return Math.Min(Math.Abs(d1 - d2), Math.Abs(d1 + Math.PI - d2));
-        }*/
+        }
     }
 }

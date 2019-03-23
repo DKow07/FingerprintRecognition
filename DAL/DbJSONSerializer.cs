@@ -38,5 +38,13 @@ namespace FingerprintRecognition.DAL
 
             return json;
         }
+
+        public void WriteToFile(string json, string path)
+        {
+            using (StreamWriter writer = new StreamWriter(path))
+            {
+                writer.Write(json);
+            }
+        }
     }
 }

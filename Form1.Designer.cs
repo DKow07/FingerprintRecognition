@@ -53,6 +53,9 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createDbToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.matchWithDbToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -192,7 +195,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.editToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(624, 24);
@@ -205,6 +209,7 @@
             this.openFingerprintToolStripMenuItem,
             this.openFingerprintToMatchToolStripMenuItem,
             this.matchToolStripMenuItem,
+            this.matchWithDbToolStripMenuItem,
             this.toolStripMenuItem2,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -318,6 +323,28 @@
             this.panel2.Size = new System.Drawing.Size(194, 33);
             this.panel2.TabIndex = 11;
             // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createDbToolStripMenuItem});
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.editToolStripMenuItem.Text = "Edit";
+            // 
+            // createDbToolStripMenuItem
+            // 
+            this.createDbToolStripMenuItem.Name = "createDbToolStripMenuItem";
+            this.createDbToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.createDbToolStripMenuItem.Text = "Create db";
+            this.createDbToolStripMenuItem.Click += new System.EventHandler(this.createDbToolStripMenuItem_Click);
+            // 
+            // matchWithDbToolStripMenuItem
+            // 
+            this.matchWithDbToolStripMenuItem.Name = "matchWithDbToolStripMenuItem";
+            this.matchWithDbToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
+            this.matchWithDbToolStripMenuItem.Text = "Match with db";
+            this.matchWithDbToolStripMenuItem.Click += new System.EventHandler(this.matchWithDbToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -379,6 +406,9 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openFingerprintToMatchToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem matchToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem createDbToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem matchWithDbToolStripMenuItem;
     }
 }
 

@@ -9,3 +9,6 @@ namespace FingerprintRecognition.DAL
         Fingerprints DeserializeMinutiaes(string json);
     }
 }
+
+
+
